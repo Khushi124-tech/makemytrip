@@ -13,6 +13,7 @@ public class Flight {
     private String arrivalTime;
     private double price;
     private int availableSeats;
+    private FlightStatus status = FlightStatus.ON_TIME;
 
     // Getters and Setters
 
@@ -78,5 +79,13 @@ public class Flight {
 
     public void setAvailableSeats(int availableSeats) {
         this.availableSeats = availableSeats;
+    }
+
+    public FlightStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FlightStatus status) {
+        this.status = status;
     }
 }
