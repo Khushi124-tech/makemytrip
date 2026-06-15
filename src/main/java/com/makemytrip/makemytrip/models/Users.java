@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.ArrayList;
+
 @Document(collection = "users")
 public class Users {
     @Id
@@ -51,6 +52,8 @@ public class Users {
         private String date;
         private int quantity;
         private double totalPrice;
+        private List<String> selectedSeats = new ArrayList<>();
+        private List<String> selectedRooms = new ArrayList<>();
 
         // Getters and Setters
         public String getType() {
@@ -91,6 +94,22 @@ public class Users {
 
         public void setTotalPrice(double totalPrice) {
             this.totalPrice = totalPrice;
+        }
+
+        public List<String> getSelectedSeats() {
+            return selectedSeats;
+        }
+
+        public void setSelectedSeats(List<String> selectedSeats) {
+            this.selectedSeats = selectedSeats;
+        }
+
+        public List<String> getSelectedRooms() {
+            return selectedRooms;
+        }
+
+        public void setSelectedRooms(List<String> selectedRooms) {
+            this.selectedRooms = selectedRooms;
         }
     }
 }

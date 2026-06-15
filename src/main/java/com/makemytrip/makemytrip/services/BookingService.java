@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +24,7 @@ public class BookingService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public Booking bookFlight(String userId,String flightId,int seats,double price){
+    public Booking bookFlight(String userId,String flightId,int seats,double price,List<String> selectedSeats){
         Optional<Users> usersOptional =userRepository.findById(userId);
         Optional<Flight> flightOptional =flightRepository.findById(flightId);
         if(usersOptional.isPresent() && flightOptional.isPresent()){
@@ -39,6 +40,7 @@ public class BookingService {
                 booking.setDate(LocalDate.now().toString());
                 booking.setQuantity(seats);
                 booking.setTotalPrice(price);
+                booking.setSelectedSeats(selectedSeats);
                 user.getBookings().add(booking);
                 userRepository.save(user);
                 return booking;
@@ -48,7 +50,7 @@ public class BookingService {
         }
         throw new RuntimeException("User or flight not found");
     }
-    public Booking bookhotel(String userId,String hotelId,int rooms,double price){
+    public Booking bookhotel(String userId,String hotelId,int rooms,double price,List<String> selectedRooms){
         Optional<Users> usersOptional =userRepository.findById(userId);
         Optional<Hotel> hotelOptional = hotelRepository.findById(hotelId);
         if(usersOptional.isPresent() && hotelOptional.isPresent()){
@@ -64,6 +66,7 @@ public class BookingService {
                 booking.setDate(LocalDate.now().toString());
                 booking.setQuantity(rooms);
                 booking.setTotalPrice(price);
+                booking.setSelectedRooms(selectedRooms);
                 user.getBookings().add(booking);
                 userRepository.save(user);
                 return booking;
