@@ -154,13 +154,16 @@ export default function Home() {
     if (bookingtype === "flights") {
       const results = flight.filter(
         (FLIGHT) =>
-          FLIGHT.from.toLowerCase() === from.toLowerCase() &&
-          FLIGHT.to.toLowerCase() === to.toLowerCase()
+          (FLIGHT?.from ?? "").toLowerCase() ===
+(from ?? "").toLowerCase() &&
+          (FLIGHT?.to ?? "").toLowerCase() ===
+(to ?? "").toLowerCase()
       );
       setsearchresult(results);
     } else if (bookingtype === "hotels") {
       const results = hotel.filter(
-        (hotel) => hotel.location.toLowerCase() === to.toLowerCase()
+        (hotel) => (hotel?.location ?? "").toLowerCase() ===
+(to ?? "").toLowerCase()
       );
       setsearchresult(results);
     }

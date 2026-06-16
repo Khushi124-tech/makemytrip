@@ -21,9 +21,12 @@ export function SearchSelect({ options, placeholder, value, onChange, icon, subt
     };
   }, []);
 
-  const filteredOptions = options.filter((option:any) =>
-    option.label.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOptions = options.filter(
+  (option: any) =>
+    (option?.label ?? "")
+  .toLowerCase()
+  .includes((searchTerm ?? "").toLowerCase())
+);
 
   return (
     <div ref={wrapperRef} className="relative">
