@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+console.log("BACKEND_URL =", BACKEND_URL);
 
 export const login = async (email, password) => {
   try {
