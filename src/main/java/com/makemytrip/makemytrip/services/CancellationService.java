@@ -10,7 +10,8 @@ import com.makemytrip.makemytrip.repositories.RefundRepository;
 import com.makemytrip.makemytrip.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -38,27 +39,44 @@ public class CancellationService {
                 .findFirst();
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("Booking not found");
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Booking not found");
         }
 
         Users user = userOptional.get();
         Users.Booking booking = user.getBookings().stream()
                 .filter(item -> bookingId.equals(item.getBookingId()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
-        
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Booking not found"));
+        System.out.println("TYPE = " + booking.getType());
+        System.out.println("BOOKING_ID = " + booking.getBookingId());
+        System.out.println("QUANTITY = " + booking.getQuantity());
         if ("Flight".equalsIgnoreCase(booking.getType())) {
 
+    System.out.println("ENTERED FLIGHT BLOCK");
+
     flightRepository.findById(booking.getBookingId())
-            .ifPresent(flight -> {
+            .ifPresentOrElse(flight -> {
+
+                System.out.println("FOUND FLIGHT = " + flight.getId());
+                System.out.println("ID = " + flight.getId());
+                System.out.println("BEFORE = " + flight.getAvailableSeats());
+
                 flight.setAvailableSeats(
                         flight.getAvailableSeats() + booking.getQuantity()
                 );
+
+                System.out.println("AFTER = " + flight.getAvailableSeats());
+
                 flightRepository.save(flight);
-            });
+
+                System.out.println("SAVED FLIGHT");
+            }, () -> {
+            System.out.println("FLIGHT NOT FOUND");
+        });
 
 } else if ("Hotel".equalsIgnoreCase(booking.getType())) {
-
     hotelRepository.findById(booking.getBookingId())
             .ifPresent(hotel -> {
                 hotel.setAvailableRooms(

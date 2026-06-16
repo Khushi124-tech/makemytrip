@@ -18,6 +18,11 @@ public class BookingController {
                                     @RequestParam int seats,
                                     @RequestParam double price,
                                     @RequestParam List<String> selectedSeats){
+        System.out.println("[BOOKING_CONTROLLER] /booking/flight userId=" + userId
+                + ", flightId=" + flightId
+                + ", seats=" + seats
+                + ", price=" + price
+                + ", selectedSeats=" + selectedSeats);
         return bookingService.bookFlight(userId,flightId,seats,price,selectedSeats);
     }
     @PostMapping("/hotel")

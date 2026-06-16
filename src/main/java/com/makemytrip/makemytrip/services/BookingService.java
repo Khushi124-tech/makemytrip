@@ -25,14 +25,28 @@ public class BookingService {
     private HotelRepository hotelRepository;
 
     public Booking bookFlight(String userId,String flightId,int seats,double price,List<String> selectedSeats){
+        System.out.println("[BOOKING_SERVICE] bookFlight started userId=" + userId
+                + ", flightId=" + flightId
+                + ", seats=" + seats
+                + ", price=" + price
+                + ", selectedSeats=" + selectedSeats);
         Optional<Users> usersOptional =userRepository.findById(userId);
+        System.out.println("[BOOKING_SERVICE] user found=" + usersOptional.isPresent());
         Optional<Flight> flightOptional =flightRepository.findById(flightId);
+        System.out.println("[BOOKING_SERVICE] flight found=" + flightOptional.isPresent());
         if(usersOptional.isPresent() && flightOptional.isPresent()){
             Users user=usersOptional.get();
             Flight flight=flightOptional.get();
+            System.out.println("[BOOKING_SERVICE] loaded flight id=" + flight.getId()
+                    + ", availableSeats=" + flight.getAvailableSeats());
             if(flight.getAvailableSeats() >= seats){
+                int beforeSeats = flight.getAvailableSeats();
                 flight.setAvailableSeats(flight.getAvailableSeats()- seats);
-                flightRepository.save(flight);
+                System.out.println("[BOOKING_SERVICE] updating flight seats " + beforeSeats
+                        + " -> " + flight.getAvailableSeats());
+                Flight savedFlight = flightRepository.save(flight);
+                System.out.println("[BOOKING_SERVICE] saved flight id=" + savedFlight.getId()
+                        + ", availableSeats=" + savedFlight.getAvailableSeats());
 
                 Booking booking=new Booking();
                 booking.setType("Flight");
